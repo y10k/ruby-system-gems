@@ -1,0 +1,31 @@
+- name: latest rubygems-update
+  become: yes
+  gem:
+    name: rubygems-update
+    user_install: no
+    include_doc: "{{ ruby_system_gems_include_doc }}"
+    state: latest
+  when: ruby_system_gems_update
+
+- name: update rubygems
+  become: yes
+  command: update_rubygems
+  when: ruby_system_gems_update
+
+- name: install system gems
+  become: yes
+  gem:
+    name: "{{ item }}"
+    user_install: no
+    include_doc: "{{ ruby_system_gems_include_doc }}"
+  with_items:
+    - "{{ ruby_system_gems_install_list }}"
+
+- name: update system gems
+  become: yes
+  command: gem update --no-user-install
+  when: ruby_system_gems_update
+
+# Local Variables:
+# indent-tabs-mode: nil
+# End:
