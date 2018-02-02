@@ -1,3 +1,4 @@
+ruby_system_gems_executable: gem
 ruby_system_gems_update: yes
 ruby_system_gems_include_doc: yes
 ruby_system_gems_install_list:
