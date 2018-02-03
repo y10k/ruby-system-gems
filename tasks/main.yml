@@ -6,6 +6,10 @@
   set_fact:
     result_stdout: "{{ result.stdout | from_yaml }}"
 
+# if you build a ruby ​​from source code, the directory where the ruby
+# executable binary and scripts are installed may not be included in
+# the PATH of the root user.  therefore this ansible role uses the
+# absolute path of gem command.
 - name: executable directory
   set_fact:
     executable_directory: >-
