@@ -30,9 +30,7 @@
 
 - name: update rubygems
   become: yes
-  command: ./update_rubygems
-  args:
-    chdir: "{{ executable_directory }}"
+  command: "{{ executable_directory }}/update_rubygems"
   when: ruby_system_gems_update
 
 - name: install system gems
@@ -47,9 +45,7 @@
 
 - name: update system gems
   become: yes
-  command: "./{{ ruby_system_gems_executable }} update --no-user-install"
-  args:
-    chdir: "{{ executable_directory }}"
+  command: "{{ executable_directory }}/{{ ruby_system_gems_executable }} update --no-user-install"
   when: ruby_system_gems_update
 
 # Local Variables:
