@@ -22,21 +22,6 @@
 
 - debug: var=executable_directory
 
-- name: latest rubygems-update
-  become: yes
-  gem:
-    name: rubygems-update
-    user_install: no
-    include_doc: "{{ ruby_system_gems_include_doc }}"
-    executable: "{{ executable_directory }}/{{ ruby_system_gems_executable }}"
-    state: latest
-  when: ruby_system_gems_update
-
-- name: update rubygems
-  become: yes
-  command: "{{ executable_directory }}/update_rubygems"
-  when: ruby_system_gems_update
-
 - name: install system gems
   become: yes
   gem:
@@ -45,7 +30,16 @@
     include_doc: "{{ ruby_system_gems_include_doc }}"
     executable: "{{ executable_directory }}/{{ ruby_system_gems_executable }}"
   with_items:
+    - rubygems-update
     - "{{ ruby_system_gems_install_list }}"
+  when: >-
+    (item == "rubygems-update" and ruby_system_gems_update) or
+    (item != "rubygems-update")
+
+- name: update rubygems
+  become: yes
+  command: "{{ executable_directory }}/update_rubygems"
+  when: ruby_system_gems_update
 
 - name: update system gems
   become: yes
