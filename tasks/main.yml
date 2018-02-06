@@ -1,4 +1,4 @@
-- name: gem environment
+- name: "gem environment of {{ ruby_system_gems_executable }}"
   command: "{{ ruby_system_gems_executable }} environment"
   register: result
 
