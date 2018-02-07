@@ -20,7 +20,8 @@
          first
       }}
 
-- debug: var=executable_directory
+- name: show executable directory
+  debug: var=executable_directory
 
 - name: install system gems
   become: yes
