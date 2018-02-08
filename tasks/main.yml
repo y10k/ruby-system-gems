@@ -1,8 +1,8 @@
-- name: "gem environment of {{ ruby_system_gems_executable }}"
+- name: "{{ ruby_system_gems_executable }} environment"
   command: "{{ ruby_system_gems_executable }} environment"
   register: result
 
-- name: gem environment result parse
+- name: "{{ ruby_system_gems_executable }} environment result parse"
   set_fact:
     result_stdout: "{{ result.stdout | from_yaml }}"
 
@@ -36,7 +36,7 @@
 
 - name: update rubygems
   block:
-    - name: rubygems-update
+    - name: "rubygems-update {{ ruby_system_gems_state }}"
       become: yes
       gem:
         name: rubygems-update
@@ -45,14 +45,17 @@
         include_doc: "{{ ruby_system_gems_include_doc }}"
         executable: "{{ executable_directory }}/{{ ruby_system_gems_executable }}"
 
-    - name: update rubygems
-      become: yes
-      command: "{{ executable_directory }}/update_rubygems"
+    - name: do update
+      block:
+      - name: update rubygems
+        become: yes
+        command: "{{ executable_directory }}/update_rubygems"
 
-    - name: update system gems
-      become: yes
-      command: "{{ executable_directory }}/{{ ruby_system_gems_executable }} update --no-user-install"
-  when: ruby_system_gems_update and (ruby_system_gems_state != "absent")
+      - name: update system gems
+        become: yes
+        command: "{{ executable_directory }}/{{ ruby_system_gems_executable }} update --no-user-install"
+      when: ruby_system_gems_state != "absent"
+  when: ruby_system_gems_update
 
 # Local Variables:
 # indent-tabs-mode: nil
